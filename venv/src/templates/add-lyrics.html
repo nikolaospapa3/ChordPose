@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add lyrics</title>
+</head>
+<body>
+    <div id="add-song" class="expand">
+        <!-- here will be the form ... -->
+        <form id="create-song" method="post" action="\create-song" onsubmit="return(validate());" >
+            
+            <output id="message"></output>
+
+            <fieldset>
+                <legend> New Song </legend>
+            <label for="song-name" class="info"> *Song Name: </label>
+            <input type="text" id="song-name" name="songName" value="{{title}}" required> <br>
+            <label for="composer" class="info"> Composer: </label>
+            <input type="text" id="composer" value="{{composer}}" name="composer"> <br>
+            <label for="lyricist" class="info"> Lyricist: </label>
+            <input type="text" id="lyricist" value="{{lyricist}}" name="lyricist"> <br>
+
+            <label for="lyrics" class="info"> *Lyrics: </label>
+            <textarea  id="lyrics" name="lyrics" cols="50" rows="20"  required>{{lyrics}}</textarea> <br>
+            </fieldset>
+
+            <input type="submit" value="Submit song">
+        </form>
+    </div>
+</body>
+</html>

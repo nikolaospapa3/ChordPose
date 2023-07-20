@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add chords for song: {{title}}</title>
+    <link rel="stylesheet" type="text/css" href="/styles">
+    
+</head>
+<body>
+    <div id="add-chords" class="expand">
+        <!-- here will be the form ... -->
+        <form id="add-chords" method="post" onsubmit="return(validate());" >
+            
+            <output id="message"></output>
+
+            <fieldset>
+                <legend> Add chords for song: {{title}} </legend>
+            <label for="song-name" class="info"> *Song Name: </label>
+            <input type="text" id="song-name" name="songName" value="{{title}}" readonly>  <br>
+            <label for="composer" class="info"> Composer: </label>
+            <input type="text" id="composer" name="composer" value="{{composer}}" readonly>  <br>
+            <label for="lyricist" class="info"> Lyricist: </label>
+            <input type="text" id="lyricist" name="lyricist" value="{{lyricist}}" readonly>  <br>
+
+            <label for="lyrics" class="info"> *Lyrics-Chords: </label> <br>
+            {% for line, chord_line in zip(lyrics.split('\n'), chords.split('\n')) %}
+            <br>
+            <input type="text" class="chords-input" style="color: red" value="{{chord_line}}" placeholder="Chords..." size="100"><br>
+            <input type="text" value="{{line}}" size="100" readonly>  <br> 
+            {% endfor %}
+
+            </fieldset>
+
+            <input type="submit" value="Submit song">
+        </form>
+    </div>
+</body>
+</html>
