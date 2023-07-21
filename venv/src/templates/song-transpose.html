@@ -1,33 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="gr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Song Transpose</title>
 </head>
 <body>
-    <div> <heading> {{title}} </heading>
+    <div> <h2> {{title}} </h2><br>
       
-        <p id="lyrics">Music by: {{composer}} <br>
-            Lyrics by: &emsp; {{lyricist}} <br>
-            <br>
-            {% for lyric_line, chord_line in zip(lyrics.split('\n'),chords.split('\n'))  %}
+        Music by: {{composers}} <br>
+        Lyrics by: {{lyricists}} <br>
+        <form method="post">
+            <label id="transporto"> Temporary Transporto: &emsp;</label> 
+            <input type="number" name="transporto" value="{{transporto}}">
+            <span> from the saved tonality</span>
+        </form>
+        <br>
+        {% for lyric_line, chord_line in zip(lyrics.split('\n'),chords.split('\n'))  %}
             
-            <span style="color: red"> {{chord_line.replace(' ', '_')}}</span><br>
+        <span style="color: red"> {{chord_line.replace(' ', '_')}}</span><br>
 
-            {{lyric_line}}  <br>
+        {{lyric_line}}  <br>
             
-            {% endfor %}
-            <br>
-            
-        </p>
-        <p>
-            <form method="post">
-                <label id="transporto"> Temporary Transporto: &emsp;</label> 
-                <input type="number" name="transporto" value="{{transporto}}">
-                <span> from the saved tonality</span>
-            </form>
-        </p>
+        {% endfor %}
+        <br>   
     </div>
 </body>
 <script>

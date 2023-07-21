@@ -18,18 +18,20 @@
                 <legend> Add chords for song: {{title}} </legend>
             <label for="song-name" class="info"> *Song Name: </label>
             <input type="text" id="song-name" name="songName" value="{{title}}" readonly>  <br>
-            <label for="composer" class="info"> Composer: </label>
-            <input type="text" id="composer" name="composer" value="{{composer}}" readonly>  <br>
-            <label for="lyricist" class="info"> Lyricist: </label>
-            <input type="text" id="lyricist" name="lyricist" value="{{lyricist}}" readonly>  <br>
+            <label for="composer" class="info"> Music by: </label>
+            <input type="text" id="composer" name="composer" value="{{composers}}" readonly>  <br>
+            <label for="lyricist" class="info"> Lyrics by: </label>
+            <input type="text" id="lyricist" name="lyricist" value="{{lyricists}}" readonly>  <br>
 
             <label for="lyrics" class="info"> *Lyrics-Chords: </label> <br>
+            
             {% for line, chord_line in zip(lyrics.split('\n'), chords.split('\n')) %}
+            
             <br>
-            <input type="text" class="chords-input" style="color: red" value="{{chord_line}}" placeholder="Chords..." size="100"><br>
-            <input type="text" value="{{line}}" size="100" readonly>  <br> 
+            <input type="text" class="chords-input" style="color: red" value="{{chord_line}}" placeholder="Chords..." size="100" name="chordsLine-{{ loop.index }}"><br>
+            <input type="text" value="{{line}}" size="100" name="lyricsLine-{{ loop.index }}">  <br> 
             {% endfor %}
-
+            
             </fieldset>
 
             <input type="submit" value="Submit song">
