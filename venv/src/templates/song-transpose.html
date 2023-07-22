@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Song Transpose</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div> <h2> {{title}} </h2><br>
@@ -11,19 +12,35 @@
         Music by: {{composers}} <br>
         Lyrics by: {{lyricists}} <br>
         <form method="post">
-            <label id="transporto"> Temporary Transporto: &emsp;</label> 
+            <label id="transporto">
+            
+            {% if type_transporto=='Temporary' %}
+            {{type_transporto}} 
+            {% else %}
+            <strong style="font-size: 2rem; color: orangered;">{{type_transporto}}</strong>
+            {% endif %}
+
+              Transporto: &emsp;</label> 
             <input type="number" name="transporto" value="{{transporto}}">
             <span> from the saved tonality</span>
         </form>
         <br>
         {% for lyric_line, chord_line in zip(lyrics.split('\n'),chords.split('\n'))  %}
             
-        <span style="color: red"> {{chord_line.replace(' ', '_')}}</span><br>
+        <span style="color: red"> {{chord_line.replace(' ', '.')}}</span><br>
 
         {{lyric_line}}  <br>
             
         {% endfor %}
-        <br>   
+        <br> 
+        <a href="/{{song_id}}/update-lyrics"> <<< Update lyrics</a> <br>
+        <a href="/{{song_id}}/update-chords"> <<< Update chords</a> <br>
+        {% if type_transporto=='Temporary' %}
+        <a href="/{{song_id}}/permanent-transporto"> <<< Permanent transporto</a> <br> 
+        {% else %}
+        <a href="/{{song_id}}/song-transpose"> See song >>> </a> <br> 
+        {% endif %}
+        <a href='/'>Home</a> <br>
     </div>
 </body>
 <script>

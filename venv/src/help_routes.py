@@ -43,15 +43,15 @@ def unique_song(db, title, lyricists: list):
     return True
     
 
-def insert_song(db, title, composers: str, lyricists: str, lyrics) -> str:
+def insert_song(db, title, composers: str, lyricists: str, lyrics) -> tuple:
     '''function for song insertion in DB-> returns a message'''
     
     # split composers and lyricists 
-    composers_list = composers.split(',')
-    lyricists_list = lyricists.split(',')
+    composers_list = [x.strip() for x in composers.split(',')]
+    lyricists_list = [x.strip() for x in lyricists.split(',')]
     
     if not unique_song(db, title, lyricists_list):
-        return f'There is already a song with title: {title} and lyricist some of them: {lyricists}'
+        return (f'There is already a song with title: {title} and lyricist some of them: {lyricists}', 0)
 
     # if not exists -> insert into Database tables: Song , WroteMusic , WroteLyrics
     # insert also into Composer, Lyricist (if not inserted already)
@@ -87,20 +87,62 @@ def insert_song(db, title, composers: str, lyricists: str, lyrics) -> str:
             cursor.execute(sql)
             db.commit()
     except:
-        return "Song Insertion failed due to an error in tables, Song, WroteMusic or WroteLyrics"
-    return ''
+        return ("Song Insertion failed due to an error in tables, Song, WroteMusic or WroteLyrics", id)
+    return ('', id)
             
 
-def update_song() -> str:
+def update_song(db, song_id, title, composers: str, lyricists: str, lyrics) -> str:
     '''used for update song in DB (title, composer, lyricist, lyrics) -> returns a message'''
     
-    # unique_song()
-
-    # if not exists -> update Database tables: Song 
-    # delete from WroteMusic , WroteLyrics the tuples that refer to this song_id
-    # insert the new composers, lyricists
+    # split composers and lyricists
+    composers_list = [x.strip() for x in composers.split(',')]
+    lyricists_list = [x.strip() for x in lyricists.split(',')]
+    
+    old_title, _, _, _ , old_lyricists = get_song_by_id(db, song_id)
+    if old_title != title or old_lyricists != lyricists:    # if title or lyricists changed check...
+        if not unique_song(db, title, lyricists_list):
+            return f'There is already a song with title: {title} and lyricist some of them: {lyricists}'
+    
     # insert also into Composer, Lyricist (if not inserted already)
-    pass
+    cursor = db.cursor()
+    for composer in composers_list:
+        try:
+            sql = f"""insert into Composer values ("{composer}")"""
+            cursor.execute(sql)
+            db.commit()
+        except:
+            print(f"composer: {composer} was already in Database")
+    for lyricist in lyricists_list:
+        try:
+            sql = f"""insert into Lyricist values ("{lyricist}")"""
+            cursor.execute(sql)
+            db.commit()
+        except:
+            print(f"lyricist: {lyricist} was already in Database")
+    try:
+        # if not exists -> update Database tables: Song
+        sql = f"""update Song set title="{title}", lyrics="{lyrics}" where id={song_id}"""
+        cursor.execute(sql)
+        db.commit()
+        # delete from WroteMusic , WroteLyrics the tuples that refer to this song_id
+        sql = f"""delete from WroteMusic where song_id={song_id}"""
+        cursor.execute(sql)
+        db.commit()
+        sql = f"""delete from WroteLyrics where song_id={song_id}"""
+        cursor.execute(sql)
+        db.commit()
+        # # insert the new composers, lyricists in WroteMusic , WroteLyrics
+        for composer in composers_list:
+            sql = f"""insert into WroteMusic values ("{composer}","{song_id}")"""
+            cursor.execute(sql)
+            db.commit()
+        for lyricist in lyricists_list:
+            sql = f"""insert into WroteLyrics values ("{lyricist}","{song_id}")"""
+            cursor.execute(sql)
+            db.commit()
+    except:
+        return "Song Insertion failed due to an error in tables, Song, WroteMusic or WroteLyrics"
+    return ''
 
 def update_lyrics_chords(db, song_id, lyrics, chords):
     '''used for insert/update chords in DB (and maybe lyrics) to a song'''
@@ -115,4 +157,10 @@ def update_lyrics_chords(db, song_id, lyrics, chords):
 
 def update_chords(db, song_id, chords):
     '''used for permanent transporto in DB'''
-    pass
+    cursor = db.cursor()
+    try:
+        sql = f"""update Song set chords="{chords}" where id="{song_id}" """
+        cursor.execute(sql)
+        db.commit()
+    except:
+        print("Error in chords update")

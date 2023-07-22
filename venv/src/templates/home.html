@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1> Home page for ChordPose </h1><br> 
+    <a href="/add-song"> Add a new song </a>
+    <br>
+    <form method="post">
+        <label for="find"> Find Song </label>
+            <input id="find" list="songs" name="find">
+            <datalist id="songs">
+                <select name="song" id="song">
+                     {% for song in songs %}
+                     <option value="{{song}}">{{song}}</option>
+                     {% endfor%}
+                </select>
+                </datalist>
+    </form>
+    {% for id in ids %}
+       &emsp; &emsp; <a href="/{{id}}/song-transpose">{{selected}}</a>
+    {% endfor %}
+</body>
+
+</html>

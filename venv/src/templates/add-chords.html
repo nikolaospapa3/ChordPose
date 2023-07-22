@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add chords for song: {{title}}</title>
-    <link rel="stylesheet" type="text/css" href="/styles">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     
 </head>
 <body>
@@ -34,8 +34,11 @@
             
             </fieldset>
 
-            <input type="submit" value="Submit song">
+            <input type="submit" value="Submit song >>>">
         </form>
+
+        <br>
+        <a href="/{{song_id}}/update-lyrics"> <<< Update Lyrics </a>
     </div>
 </body>
 </html>

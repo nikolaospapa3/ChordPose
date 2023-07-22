@@ -44,15 +44,15 @@ db = psycopg2.connect(
 )
 '''
 
-@app.route('/')
+@app.route('/', methods = ['GET', 'POST'])
 def home_route():
-    return 'Home page for ChordPose <br>'
+    return home(db)
 
 @app.route('/add-song', methods = ['GET', 'POST'])
 def add_song_route():
     return add_lyrics(db)
 
-@app.route('/<song_id>/update-lyrics', methods = ['GET', 'PUT'])
+@app.route('/<song_id>/update-lyrics', methods = ['GET', 'POST'])
 def update_lyrics_route(song_id):
     return add_lyrics(db, song_id=song_id, update=True)
 
@@ -60,18 +60,18 @@ def update_lyrics_route(song_id):
 def add_chords_route(song_id):
     return add_chords(db, song_id)
 
-@app.route('/<song_id>/update-chords', methods = ['GET', 'PATCH'])
+@app.route('/<song_id>/update-chords', methods = ['GET', 'POST'])
 def update_chords_route(song_id):
     return add_chords(db, song_id, update = True)
 
 
 @app.route('/<song_id>/song-transpose', methods = ['GET', 'POST'])
-def song_transpode_route(song_id):
+def song_transpose_route(song_id):
     return song_transpose(db, song_id)
 
-@app.route('/styles')
-def styles():
-    return render_template('styles.css')
+@app.route('/<song_id>/permanent-transporto', methods = ['GET', 'POST'])
+def permanent_transporto_route(song_id):
+    return song_transpose(db, song_id, permanent=True)
 
 if __name__ == '__main__':
     app.run(debug=True)
