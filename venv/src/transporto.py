@@ -2,8 +2,7 @@ from flask import Flask, render_template, request, url_for, flash, redirect, jso
 from flask_httpauth import HTTPBasicAuth
 import mysql.connector
 #import psycopg2 
-import random
-from datetime import datetime, timedelta
+
 from .help_routes import *
 
 major = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#']
@@ -26,7 +25,7 @@ def transpose(chords: str, transporto: int) -> str:
     return transposed_chords
 
 
-def song_transpose(db, song_id, permanent = False, transporto = 0):
+def song_transpose(song_id, permanent = False, transporto = 0):
     transporto = request.form.get('transporto') if request.method == 'POST' else 0
     type_transporto = "Permanent" if permanent else "Temporary"
     """
@@ -43,7 +42,7 @@ Dm                  A#    C       Dm      C   Dm
 '''
     """
     
-    title, lyrics, chords, composers, lyricists = get_song_by_id(db, song_id)
+    title, lyrics, chords, composers, lyricists = get_song_by_id(song_id)
     try:
         transporto = int(transporto)
         if chords: chords = transpose(chords, transporto)
@@ -52,6 +51,6 @@ Dm                  A#    C       Dm      C   Dm
         return "<h1> Please insert valid transporto number </h1>"
     if permanent:
         # here I should update the chords string into the Database...
-        update_chords(db, song_id, chords)
+        update_chords(song_id, chords)
         transporto = 0
     return render_template('song-transpose.html', title=title, composers=composers, lyricists=lyricists, lyrics=lyrics, chords=chords, zip=zip, transporto=transporto, song_id=song_id, type_transporto=type_transporto)

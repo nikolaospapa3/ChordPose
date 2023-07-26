@@ -15,12 +15,39 @@
 
             <fieldset>
                 <legend> New Song </legend>
+            
             <label for="song-name" class="info"> *Song Name: </label>
-            <input type="text" id="song-name" name="title" value="{{title}}" required> <br>
+            <input type="text" list="songs" id="song-name" name="title" value="{{title}}" required> 
+            <datalist id="songs">
+                <select name="song" id="song">
+                     {% for song in songs %}
+                     <option value="{{song}}">{{song}}</option>
+                     {% endfor%}
+                </select>
+                </datalist>
+            <br>
+            
             <label for="composer" class="info"> Music by: </label>
-            <input type="text" id="composer" value="{{composers}}" name="composer" placeholder="π.χ. Μίκης Θεοδωράκης"> <br>
+            <input type="text" list="all_composers" id="composer" value="{{composers}}" name="composer" placeholder="π.χ. Μίκης Θεοδωράκης"> 
+            <datalist id="all_composers">
+                <select>
+                     {% for comp in all_composers %}
+                     <option value="{{comp}}">{{comp}}</option>
+                     {% endfor%}
+                </select>
+                </datalist>
+            <br>
+            
             <label for="lyricist" class="info"> Lyrics by: </label>
-            <input type="text" id="lyricist" value="{{lyricists}}" name="lyricist" placeholder="π.χ. Γιάννης Ρίτσος"> <br>
+            <input type="text" list="all_lyricists" id="lyricist" value="{{lyricists}}" name="lyricist" placeholder="π.χ. Γιάννης Ρίτσος"> 
+            <datalist id="all_lyricists">
+                <select>
+                     {% for lyr in all_lyricists %}
+                     <option value="{{lyr}}">{{lyr}}</option>
+                     {% endfor%}
+                </select>
+                </datalist>
+            <br>
 
             <label for="lyrics" class="info"> *Lyrics: </label>
             <textarea  id="lyrics" name="lyrics" cols="50" rows="20"  required>{{lyrics}}</textarea> <br>
