@@ -25,10 +25,12 @@
 
             <label for="lyrics" class="info"> *Lyrics-Chords: </label> <br>
             
-            {% for line, chord_line in zip(lyrics.split('\n'), chords.split('\n')) %}
+            {% for line, chord_line in zip(lyrics_list, chords_list) %}
             
             <br>
-            <input type="text" class="chords-input" style="color: red" value="{{chord_line}}" placeholder="Chords..." size="100" name="chordsLine-{{ loop.index }}"><br>
+            
+            <input type="text" class="chords-input"  value="{{chord_line}}" placeholder="Chords..." size="100" name="chordsLine-{{ loop.index }}"><br>
+            
             <input type="text" value="{{line}}" size="100" name="lyricsLine-{{ loop.index }}">  <br> 
             {% endfor %}
             

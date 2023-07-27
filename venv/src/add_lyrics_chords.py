@@ -19,7 +19,7 @@ def home():
     if request.method == 'POST':
         selected = request.form.get('find') 
         print(selected)
-        sql = f"select id from song where title='{selected}'"
+        sql = f"""select id from song where title="{selected}" """
         cursor.execute(sql)
         ids = [x[0] for x in cursor.fetchall()]
         print(ids)
@@ -56,12 +56,14 @@ def add_chords(song_id, update = False):
     
     title, lyrics, chords, composers, lyricists = get_song_by_id(song_id)
     if request.method == 'GET':
-        if chords=='' or update==False:
+        if chords=='' or update==False or chords is None:
             chords = '\n'.join(len(lyrics.split('\n')) * [''])
         elif len(chords.split('\n')) != len(lyrics.split('\n')):    # if rows of lyrics != rows of chords
             k = len(lyrics.split('\n')) - len(chords.split('\n'))
             chords += k*'\n'                                       # make rows the same
-        return render_template('add-chords.html', title=title, composers=composers, lyricists=lyricists, lyrics=lyrics, chords=chords, song_id=song_id, i=0, zip=zip)
+        chords_list = [ x + (100 - len(x)) * ' '  for x in chords.split('\n')]  # because 100 is max input size
+        lyrics_list = lyrics.split('\n')
+        return render_template('add-chords.html', title=title, composers=composers, lyricists=lyricists, lyrics_list=lyrics_list, chords_list=chords_list, song_id=song_id, i=0, zip=zip) 
     elif request.method == 'POST':
         lines = len(lyrics.split('\n'))
         lyrics = []
@@ -70,7 +72,7 @@ def add_chords(song_id, update = False):
             lyrics_line = request.form.get(f'lyricsLine-{i+1}')
             lyrics_line = lyrics_line if lyrics_line else ''
             chords_line = request.form.get(f'chordsLine-{i+1}')
-            chords_line = chords_line if chords_line else ''
+            chords_line = chords_line.rstrip() if chords_line else ''
             lyrics.append(lyrics_line)  # get list of inputs
             chords.append(chords_line) 
         lyrics = '\n'.join(lyrics) # list -> str

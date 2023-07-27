@@ -1,5 +1,11 @@
 .chords-input {
+    color: red;
     background-color: yellow;
+}
+
+.chord-line {
+    color: red;
+    white-space: pre;
 }
 
 body, input {

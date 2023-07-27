@@ -27,7 +27,7 @@
         <br>
         {% for lyric_line, chord_line in zip(lyrics.split('\n'),chords.split('\n'))  %}
             
-        <span style="color: red"> {{chord_line.replace(' ', '.')}}</span><br>
+        <span class="chord-line">{{chord_line}}</span><br> 
 
         {{lyric_line}}  <br>
             
