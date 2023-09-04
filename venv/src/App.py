@@ -54,24 +54,28 @@ def verify_password(username, password):
     if username in users and password == users[username]: #or username==get_admin()[0] and password==get_admin()[1]:
         return username
 
-@auth.login_required
+
 @app.route('/', methods = ['GET', 'POST'])
 def home_route():
     return home()
 
 @app.route('/add-song', methods = ['GET', 'POST'])
+@auth.login_required
 def add_song_route():
     return add_lyrics()
 
 @app.route('/<song_id>/update-lyrics', methods = ['GET', 'POST'])
+@auth.login_required
 def update_lyrics_route(song_id):
     return add_lyrics(song_id=song_id, update=True)
 
 @app.route('/<song_id>/add-chords', methods = ['GET', 'POST'])
+@auth.login_required
 def add_chords_route(song_id):
     return add_chords(song_id)
 
 @app.route('/<song_id>/update-chords', methods = ['GET', 'POST'])
+@auth.login_required
 def update_chords_route(song_id):
     return add_chords(song_id, update = True)
 
@@ -81,6 +85,7 @@ def song_transpose_route(song_id):
     return song_transpose(song_id)
 
 @app.route('/<song_id>/permanent-transporto', methods = ['GET', 'POST'])
+@auth.login_required
 def permanent_transporto_route(song_id):
     return song_transpose(song_id, permanent=True)
 
