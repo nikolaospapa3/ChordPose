@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, url_for, flash, redirect, jso
 from flask_httpauth import HTTPBasicAuth
 import mysql.connector
 #import psycopg2 
-from .__init__ import get_db
+from __init__ import get_db
 
 def all_composers() -> list:
     db = get_db()

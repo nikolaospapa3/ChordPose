@@ -3,9 +3,9 @@ from flask_httpauth import HTTPBasicAuth
 import mysql.connector
 #import psycopg2 
 
-from .help_routes import *
-from .__init__ import get_db
-from .all import *
+from help_routes import *
+from __init__ import get_db
+from all import *
 
 
 def home():

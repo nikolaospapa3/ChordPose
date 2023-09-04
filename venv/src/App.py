@@ -3,9 +3,9 @@ from flask_httpauth import HTTPBasicAuth
 import mysql.connector
 #import psycopg2 
 
-from .add_lyrics_chords import *
-from .help_routes import *
-from .transporto import *
+from add_lyrics_chords import *
+from help_routes import *
+from transporto import *
 
 #from .accept import *
 
@@ -44,8 +44,17 @@ db = psycopg2.connect(
 )
 '''
 
+users = {
+    "AN": "ablaoublas"
+}
 
+# Verify the username and password for each request
+@auth.verify_password
+def verify_password(username, password):
+    if username in users and password == users[username]: #or username==get_admin()[0] and password==get_admin()[1]:
+        return username
 
+@auth.login_required
 @app.route('/', methods = ['GET', 'POST'])
 def home_route():
     return home()

@@ -3,7 +3,7 @@ from flask_httpauth import HTTPBasicAuth
 import mysql.connector
 #import psycopg2 
 
-from .__init__ import get_db
+from __init__ import get_db
 
 '''Functions to select/insert/update/delete from the Database'''
 
