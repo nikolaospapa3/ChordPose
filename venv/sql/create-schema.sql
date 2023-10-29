@@ -53,3 +53,17 @@ create table WroteLyrics (
     constraint foreign key (lyricist) references Lyricist(name) on update restrict on delete restrict,
     constraint foreign key (song_id) references Song(id) on update restrict on delete restrict
 );
+
+create table Team (
+    name varchar(50),
+    primary key (name)
+);
+
+create table MemberOfTeam (
+    username varchar(20),
+    teamname varchar(50) default 'NTUA',
+    points int(20),
+    primary key (teamname, username),
+    constraint foreign key (teamname) references Team(name) on update restrict on delete restrict,
+    constraint foreign key (username) references User(username) on update restrict on delete restrict,
+);

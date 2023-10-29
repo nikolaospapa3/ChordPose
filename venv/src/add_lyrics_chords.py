@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, url_for, flash, redirect, jsonify, abort, g
 from flask_httpauth import HTTPBasicAuth
 import mysql.connector
+from web_scrape import take_from_greeklyrics
 #import psycopg2 
 
 from help_routes import *
@@ -41,6 +42,11 @@ def add_lyrics(song_id = '', update = False):
         composers = request.form.get('composer')
         lyricists = request.form.get('lyricist')
         lyrics = request.form.get('lyrics')
+
+        if lyrics=='': # Web Scraping
+            title, composers, lyricists, lyrics = take_from_greeklyrics(title)
+            return render_template('add-lyrics.html', title = title, composers=composers, lyricists=lyricists, lyrics=lyrics, all_composers = all_composers(), all_lyricists = all_lyricists(), songs = all_songs())
+        
         #print("I got the submitted info from the form")
         if update:
             message = update_song(song_id, title, composers, lyricists, lyrics)

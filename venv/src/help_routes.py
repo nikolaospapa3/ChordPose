@@ -109,37 +109,37 @@ def update_song(song_id, title, composers: str, lyricists: str, lyrics) -> str:
     cursor = db.cursor()
     for composer in composers_list:
         try:
-            sql = f"""insert into Composer values ("{composer}")"""
+            sql = f"""insert into composer values ("{composer}")"""
             cursor.execute(sql)
             db.commit()
         except:
             print(f"composer: {composer} was already in Database")
     for lyricist in lyricists_list:
         try:
-            sql = f"""insert into Lyricist values ("{lyricist}")"""
+            sql = f"""insert into lyricist values ("{lyricist}")"""
             cursor.execute(sql)
             db.commit()
         except:
             print(f"lyricist: {lyricist} was already in Database")
     try:
         # if not exists -> update Database tables: Song
-        sql = f"""update Song set title="{title}", lyrics="{lyrics}" where id={song_id}"""
+        sql = f"""update song set title="{title}", lyrics="{lyrics}" where id={song_id}"""
         cursor.execute(sql)
         db.commit()
         # delete from WroteMusic , WroteLyrics the tuples that refer to this song_id
-        sql = f"""delete from WroteMusic where song_id={song_id}"""
+        sql = f"""delete from wrotemusic where song_id={song_id}"""
         cursor.execute(sql)
         db.commit()
-        sql = f"""delete from WroteLyrics where song_id={song_id}"""
+        sql = f"""delete from wrotelyrics where song_id={song_id}"""
         cursor.execute(sql)
         db.commit()
         # # insert the new composers, lyricists in WroteMusic , WroteLyrics
         for composer in composers_list:
-            sql = f"""insert into WroteMusic values ("{composer}","{song_id}")"""
+            sql = f"""insert into wrotemusic values ("{composer}","{song_id}")"""
             cursor.execute(sql)
             db.commit()
         for lyricist in lyricists_list:
-            sql = f"""insert into WroteLyrics values ("{lyricist}","{song_id}")"""
+            sql = f"""insert into wrotelyrics values ("{lyricist}","{song_id}")"""
             cursor.execute(sql)
             db.commit()
     except:
