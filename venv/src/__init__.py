@@ -9,6 +9,7 @@ def get_db():
     if 'db' not in g:
         # for MySQL
         g.db = mysql.connector.connect(
+            port = 3307,
             host="localhost",
             user="root",
             password="",  # that's because I do not use a password... you may change it for your DBMS

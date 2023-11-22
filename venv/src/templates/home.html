@@ -13,7 +13,7 @@
     <br>
     <form method="post">
         <label for="find"> Find Song </label>
-            <input id="find" list="songs" name="find"> ( write/select and press 'Enter')
+            <input id="find" list="songs" name="find" autocomplete="off"> ( write/select and press 'Enter')
             <datalist id="songs">
                 <select name="song" id="song">
                      {% for song in songs %}

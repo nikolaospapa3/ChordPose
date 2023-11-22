@@ -77,7 +77,17 @@ d = {"Α" : "a",
  "Ώ" : "w",
  "ώ" : "w",
  "ω" : "w",
- " " : "-"
+ " " : "-",
+ "0" : "0",
+"1" : "1",
+"2" : "2",
+"3" : "3",
+"4" : "4",
+"5" : "5",
+"6" : "6",
+"7" : "7",
+"8" : "8",
+"9" : "9"
 }
 
 def find_html_from(url):
@@ -119,6 +129,7 @@ def take_from_greeklyrics(search_title: str, show = False) -> (str, str, str, st
     html = find_html_from(url + modified_title)  
     if "Error"==html[-5:]: 
         print(f"Page cannot be reached due to {html}")
+        return ("","","",f"{html}")
         
     soup = BeautifulSoup(html, 'html.parser') 
 
@@ -167,3 +178,6 @@ def take_from_greeklyrics(search_title: str, show = False) -> (str, str, str, st
         print("Lyrics not found")
     
     return (title, composer_name, lyricist_name, lyrics)
+
+#x = take_from_greeklyrics('Κιφ')
+#print(x)

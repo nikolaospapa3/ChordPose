@@ -42,19 +42,28 @@ def add_lyrics(song_id = '', update = False):
         composers = request.form.get('composer')
         lyricists = request.form.get('lyricist')
         lyrics = request.form.get('lyrics')
-
-        if lyrics=='': # Web Scraping
+        search_title = title
+        button_info = request.form.get('button-info')
+        if button_info=='find-lyrics': # Web Scraping
             title, composers, lyricists, lyrics = take_from_greeklyrics(title)
+            if not title: 
+                msg = lyrics
+                return render_template('add-lyrics.html', title = search_title, composers='', lyricists='', lyrics='', all_composers = all_composers(), all_lyricists = all_lyricists(), songs = all_songs()) \
+                     + f"<p style='color: red;'>The song: {search_title} cannot be found due to {msg}</p>"   # returns the error message
             return render_template('add-lyrics.html', title = title, composers=composers, lyricists=lyricists, lyrics=lyrics, all_composers = all_composers(), all_lyricists = all_lyricists(), songs = all_songs())
         
         #print("I got the submitted info from the form")
+        massive = ''
+        if button_info=='massive-submit':
+            massive = render_template('add-lyrics.html', title = search_title, composers='', lyricists='', lyrics='', all_composers = all_composers(), all_lyricists = all_lyricists(), songs = all_songs()) 
         if update:
             message = update_song(song_id, title, composers, lyricists, lyrics)
             if message: return f"<h1>{message}</h1>"
-            return f"Successful Updation! <br> <a href='/{song_id}/update-chords'>Update chords</a> <br> <a href='/'>Home</a> <br>"
+            return massive + f"Successful Updation! <br> <a href='/{song_id}/update-chords'>Update chords</a> <br> <a href='/'>Home</a> <br>"
+            
         message, song_id = insert_song(title, composers, lyricists, lyrics)
         if message: return f"<h1>{message}</h1>"
-        return f"Successful Insertion!  <br> <a href='/{song_id}/add-chords'>Add chords</a> <br> <a href='/'>Home</a> <br>"
+        return massive + f"Successful Insertion!  <br> <a href='/{song_id}/add-chords'>Add chords</a> <br> <a href='/'>Home</a> <br>"
     else:
         pass
 
