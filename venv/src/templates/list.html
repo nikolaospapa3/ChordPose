@@ -7,26 +7,47 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
+
+  <a href='/'> <<< Home</a> <br> <br> <br>
+
+  <p>
+    You can drag each song and trasfer it (change the sequence of the songs) <br>
+    When you see <em style="color: red;">red</em> highlighting, you can drop it there and make it have this position <br>
+    When you see another song with <em style="border: 3px dotted #666;">dotted</em> border, then if you drop it there songs exchange position <br>
+  </p>
+
+  <button class="print" onclick="print()">Print</button>  <br>
+
+  <form method="post" onsubmit="print()"> <textarea type="text" id="songList" name="songList" style="display: none;"></textarea> <input type="submit" value="Print and Save"> </form>
+  
+    <label for="find"> Add Song to List </label>
+        <input id="find" list="songs" name="find" autocomplete="off"> ( write/select and press 'Enter')
+        <datalist id="songs">
+            <select name="song" id="song">
+                 {% for song in songs %}
+                 <option value="{{song}}">{{song}}</option>
+                 {% endfor%}
+            </select>
+            </datalist>
+  
     <div class="container">
         <div class="special"> Start </div>
         <div class="hide"></div>
-
-        <div draggable="true" class="box">Άλλα μου λεν τα μάτια σου</div>
+<!--
+        <div draggable="true" class="box"> <span >Άλλα μου λεν τα μάτια σου</span> <button class="remove" onclick="removeSong()">Remove</button> </div>
         <div class="hide"></div>
-        <div draggable="true" class="box">Βικτώρια</div>
+        <div draggable="true" class="box"> <span >Βικτώρια</span> <button class="remove" onclick="removeSong()">Remove</button> </div>
         <div class="hide"></div>
-        <div draggable="true" class="box">Περσείδες</div>
+        <div draggable="true" class="box"> <span >Της γυναίκας η καρδιά</span> <button class="remove" onclick="removeSong()">Remove</button> </div>
         <div class="hide"></div>
-        <div draggable="true" class="box">Της γυναίκας η καρδιά</div>
+        <div draggable="true" class="box"> <span >Γεια σου χαρά σου Βενετιά</span> <button class="remove" onclick="removeSong()">Remove</button> </div>
         <div class="hide"></div>
-        <div draggable="true" class="box">Γεια σου χαρά σου Βενετιά</div>
+        <div draggable="true" class="box"> <span >Πυροσβεστήρας</span> <button class="remove" onclick="removeSong()">Remove</button> </div>
         <div class="hide"></div>
-        <div draggable="true" class="box">Πυροσβεστήρας</div>
-        <div class="hide"></div>
-
+-->
 
         {% for song in songs %}
-        <div draggable="true" class="box">{{song}}</div>
+        <div draggable="true" class="box"> <span >{{song}}</span> <button class="remove" onclick="removeSong(this)">Remove</button> </div>
         <div class="hide"></div>
         {% endfor %}
         <div class="special"> End </div>
@@ -41,6 +62,16 @@
   gap: 10px;
 }
 
+.remove {
+  max-width: 55px;
+  border: 3px solid #666;
+  background-color: rgb(200, 0, 0);
+  color: white;
+  border-radius: .5em;
+  padding: 1px;
+  cursor: move;
+}
+
 .special {
   max-width: 100px;
   border: 3px solid #666;
@@ -51,6 +82,9 @@
 }
 
 .box {
+  display: flex;
+  justify-content: space-between; /* Align items along the main axis */
+  align-items: center; /* Center items vertically */
   max-width: 300px;
   border: 3px solid #666;
   background-color: #ddd;
@@ -78,7 +112,82 @@
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', (event) => {
+let inputField = document.getElementById('find');
+inputField.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' || event.keyCode === 13) {
+        // Call a function or perform an action when Enter is pressed
+        handleEnterKeyPress();
+    }
+});
+
+function handleEnterKeyPress(){
+  let song = document.getElementById('find').value;
+  let parentElement = document.querySelector('.container');
+    let newEl = newElement(song);
+    let newhiddenEl = hiddenElement();
+
+    for (item of [newEl, newhiddenEl]){
+        item.addEventListener('dragstart', handleDragStart);
+        item.addEventListener('dragover', handleDragOver);
+        item.addEventListener('dragenter', handleDragEnter);
+        item.addEventListener('dragleave', handleDragLeave);
+        item.addEventListener('dragend', handleDragEnd);
+        item.addEventListener('drop', handleDrop);
+    }
+
+    let start = document.querySelector('.special');
+    parentElement.insertBefore(newhiddenEl, start.nextElementSibling.nextElementSibling); 
+    parentElement.insertBefore(newEl, newhiddenEl);
+
+  return false;
+}
+
+function print(){
+  let songList = document.querySelectorAll('span');
+  let out = '';
+  for (song of songList){
+    out += song.textContent;
+    out += '\n';
+  }
+  window.alert(`${out}`)
+  let formInput = document.querySelector('#songList');
+  formInput.value = out;
+}
+
+function removeSong(btn){
+  let divRemove = btn.parentElement;
+  let hiddenRemove = divRemove.nextElementSibling;
+  let parent = divRemove.parentElement;
+  parent.removeChild(divRemove);
+  parent.removeChild(hiddenRemove);
+  
+}
+
+function newElement(song){
+  let newEl = document.createElement('div');
+  newEl.classList.add('box');
+  newEl.draggable = true;
+    
+  let spanEl = document.createElement('span');
+  spanEl.textContent =  song; 
+  let btnEl = document.createElement('button');
+  btnEl.classList.add('remove');
+  btnEl.textContent = 'Remove';
+  btnEl.addEventListener('click', function (){ removeSong(btnEl); } );
+
+  newEl.appendChild(spanEl);
+  newEl.appendChild(btnEl);
+  return newEl;
+}
+
+function hiddenElement(){
+  let newhiddenEl = document.createElement('div');
+  newhiddenEl.classList.add('hide');
+  newhiddenEl.draggable = true;
+  return newhiddenEl;
+}
+
+//document.addEventListener('DOMContentLoaded', (event) => {
 
 function handleDragStart(e) {
   this.style.opacity = '0.4';
@@ -86,7 +195,7 @@ function handleDragStart(e) {
   dragSrcEl = this;
 
   e.dataTransfer.effectAllowed = 'move';
-  e.dataTransfer.setData('text/html', this.innerHTML);
+  e.dataTransfer.setData('text/html', this.firstElementChild.innerHTML);
 }
 
 
@@ -116,20 +225,14 @@ function handleDrop(e) {
 
   if (dragSrcEl !== this) {
     if (this.classList.contains('box')){
-    dragSrcEl.innerHTML = this.innerHTML;
-    this.innerHTML = e.dataTransfer.getData('text/html');
+    dragSrcEl.firstElementChild.innerHTML = this.firstElementChild.innerHTML;
+    this.firstElementChild.innerHTML = e.dataTransfer.getData('text/html');
     }
     else {
+
     let parentElement = document.querySelector('.container');
-
-    let newEl = document.createElement('div');
-    newEl.classList.add('box');
-    newEl.draggable = true;
-    newEl.textContent = dragSrcEl.textContent; 
-
-    let newhiddenEl = document.createElement('div');
-    newhiddenEl.classList.add('hide');
-    newhiddenEl.draggable = true;
+    let newEl = newElement(dragSrcEl.firstElementChild.textContent);
+    let newhiddenEl = hiddenElement();
 
     for (item of [newEl, newhiddenEl]){
         item.addEventListener('dragstart', handleDragStart);
@@ -139,27 +242,25 @@ function handleDrop(e) {
         item.addEventListener('dragend', handleDragEnd);
         item.addEventListener('drop', handleDrop);
     }
-
+/*
     console.log('Before Insertion');
     console.log(this);
     console.log(this.nextSibling);
     console.log(this.nextElementSibling);
     console.log(this.nextElementSibling.textContent);
-
+*/
     parentElement.insertBefore(newhiddenEl, this.nextElementSibling); 
     parentElement.insertBefore(newEl, newhiddenEl);
-
+/*
     console.log('After Insertion');
     console.log(this);
     console.log(this.nextSibling);
     console.log(this.nextElementSibling);
     console.log(this.nextElementSibling.textContent);
-
+*/
 
     parentElement.removeChild(dragSrcEl.nextElementSibling);
     parentElement.removeChild(dragSrcEl);
-
-    
     }
     
 }   
@@ -186,7 +287,7 @@ totalItems.forEach(function(item) {
   item.addEventListener('dragend', handleDragEnd);
   item.addEventListener('drop', handleDrop);
 });
-});
+//  });
 
 
 </script>

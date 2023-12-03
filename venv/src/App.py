@@ -99,9 +99,15 @@ def next(song_id):
     next_song_id = song_id + 1
     return redirect(f'/{next_song_id}/song-transpose')
 
-@app.route('/list')
+@app.route('/list', methods=['GET', 'POST'])
 def list():
-    return render_template('list.html', songs=all_songs())
+    if request.method == 'GET':
+        return render_template('list.html', songs=songs_list())
+    # POST
+    out = request.form.get('songList')
+    with open('list.txt', 'w') as file:
+        file.write(out)
+    return 'Saved Succesfully  <br> <a href="/list">List</a>   <br><br>' + out.replace('\n', '<br>')
 
 @app.route('/check')
 def check():
@@ -211,4 +217,4 @@ Wonderful Tonight
     return out
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
