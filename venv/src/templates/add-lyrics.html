@@ -34,7 +34,7 @@
             <br>
             
             <label for="composer" class="info"> Music by: </label>
-            <input type="text" list="all_composers" id="composer" value="{{composers}}" name="composer" placeholder="π.χ. Θεοδωράκης Μίκης" size="40"> 
+            <input type="text" list="all_composers" id="composer" value="{{composers}}" name="composer" placeholder="π.χ. Θεοδωράκης Μίκης" size="40" autocomplete="off"> 
             <datalist id="all_composers">
                 <select>
                      {% for comp in all_composers %}
@@ -45,7 +45,7 @@
             <br>
             
             <label for="lyricist" class="info"> Lyrics by: </label>
-            <input type="text" list="all_lyricists" id="lyricist" value="{{lyricists}}" name="lyricist" placeholder="π.χ. Ρίτσος Γιάννης" size="40"> 
+            <input type="text" list="all_lyricists" id="lyricist" value="{{lyricists}}" name="lyricist" placeholder="π.χ. Ρίτσος Γιάννης" size="40" autocomplete="off"> 
             <datalist id="all_lyricists">
                 <select>
                      {% for lyr in all_lyricists %}

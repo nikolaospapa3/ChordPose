@@ -29,9 +29,9 @@
             
             <br>
             
-            <input type="text" class="chords-input"  value="{{chord_line}}" placeholder="Chords..." size="100" name="chordsLine-{{ loop.index }}"><br>
+            <input type="text" class="chords-input"  value="{{chord_line}}" placeholder="Chords..." size="100" name="chordsLine-{{ loop.index }}" autocomplete="off"><br>
             
-            <input type="text" value="{{line}}" size="100" name="lyricsLine-{{ loop.index }}">  <br> 
+            <input type="text" value="{{line}}" size="100" name="lyricsLine-{{ loop.index }}" autocomplete="off">  <br> 
             {% endfor %}
             
             </fieldset>

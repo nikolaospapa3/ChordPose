@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="special"> Start </div>
+        <div class="hide"></div>
+
+        <div draggable="true" class="box">Άλλα μου λεν τα μάτια σου</div>
+        <div class="hide"></div>
+        <div draggable="true" class="box">Βικτώρια</div>
+        <div class="hide"></div>
+        <div draggable="true" class="box">Περσείδες</div>
+        <div class="hide"></div>
+        <div draggable="true" class="box">Της γυναίκας η καρδιά</div>
+        <div class="hide"></div>
+        <div draggable="true" class="box">Γεια σου χαρά σου Βενετιά</div>
+        <div class="hide"></div>
+        <div draggable="true" class="box">Πυροσβεστήρας</div>
+        <div class="hide"></div>
+
+
+        {% for song in songs %}
+        <div draggable="true" class="box">{{song}}</div>
+        <div class="hide"></div>
+        {% endfor %}
+        <div class="special"> End </div>
+      </div>
+      
+</body>
+
+<style>
+.container {
+  display: grid;
+  /*grid-template-rows: repeat(5, 1fr);*/
+  gap: 10px;
+}
+
+.special {
+  max-width: 100px;
+  border: 3px solid #666;
+  background-color: yellow;
+  border-radius: .5em;
+  padding: 10px;
+  cursor: move;
+}
+
+.box {
+  max-width: 300px;
+  border: 3px solid #666;
+  background-color: #ddd;
+  border-radius: .5em;
+  padding: 10px;
+  cursor: move;
+}
+
+.hide {
+    height: 10px;
+    background-color: white;
+    cursor: move;
+    box-sizing: border-box;
+}
+
+.box.over {
+  border: 3px dotted #666;
+}
+
+.hide.over {
+    background-color:  red;
+}
+
+
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+
+function handleDragStart(e) {
+  this.style.opacity = '0.4';
+
+  dragSrcEl = this;
+
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/html', this.innerHTML);
+}
+
+
+function handleDragEnd(e) {
+  this.style.opacity = '1';
+
+  items.forEach(function (item) {
+    item.classList.remove('over');
+  });
+}
+
+function handleDragOver(e) {
+  e.preventDefault();
+  return false;
+}
+
+function handleDragEnter(e) {
+  this.classList.add('over');
+}
+
+function handleDragLeave(e) {
+  this.classList.remove('over');
+}
+
+function handleDrop(e) {
+  e.stopPropagation();
+
+  if (dragSrcEl !== this) {
+    if (this.classList.contains('box')){
+    dragSrcEl.innerHTML = this.innerHTML;
+    this.innerHTML = e.dataTransfer.getData('text/html');
+    }
+    else {
+    let parentElement = document.querySelector('.container');
+
+    let newEl = document.createElement('div');
+    newEl.classList.add('box');
+    newEl.draggable = true;
+    newEl.textContent = dragSrcEl.textContent; 
+
+    let newhiddenEl = document.createElement('div');
+    newhiddenEl.classList.add('hide');
+    newhiddenEl.draggable = true;
+
+    for (item of [newEl, newhiddenEl]){
+        item.addEventListener('dragstart', handleDragStart);
+        item.addEventListener('dragover', handleDragOver);
+        item.addEventListener('dragenter', handleDragEnter);
+        item.addEventListener('dragleave', handleDragLeave);
+        item.addEventListener('dragend', handleDragEnd);
+        item.addEventListener('drop', handleDrop);
+    }
+
+    console.log('Before Insertion');
+    console.log(this);
+    console.log(this.nextSibling);
+    console.log(this.nextElementSibling);
+    console.log(this.nextElementSibling.textContent);
+
+    parentElement.insertBefore(newhiddenEl, this.nextElementSibling); 
+    parentElement.insertBefore(newEl, newhiddenEl);
+
+    console.log('After Insertion');
+    console.log(this);
+    console.log(this.nextSibling);
+    console.log(this.nextElementSibling);
+    console.log(this.nextElementSibling.textContent);
+
+
+    parentElement.removeChild(dragSrcEl.nextElementSibling);
+    parentElement.removeChild(dragSrcEl);
+
+    
+    }
+    
+}   
+  
+  return false;
+}
+
+
+
+let items = document.querySelectorAll('.container .box');
+let hidden = document.querySelectorAll('.container .hide');
+// Convert NodeLists to arrays using Array.from()
+let itemsArray = Array.from(items);
+let hiddenArray = Array.from(hidden);
+
+// Merge arrays using concat()
+let totalItems = itemsArray.concat(hiddenArray);
+
+totalItems.forEach(function(item) {
+  item.addEventListener('dragstart', handleDragStart);
+  item.addEventListener('dragover', handleDragOver);
+  item.addEventListener('dragenter', handleDragEnter);
+  item.addEventListener('dragleave', handleDragLeave);
+  item.addEventListener('dragend', handleDragEnd);
+  item.addEventListener('drop', handleDrop);
+});
+});
+
+
+</script>
+</html>

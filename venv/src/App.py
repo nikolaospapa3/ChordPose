@@ -99,6 +99,10 @@ def next(song_id):
     next_song_id = song_id + 1
     return redirect(f'/{next_song_id}/song-transpose')
 
+@app.route('/list')
+def list():
+    return render_template('list.html', songs=all_songs())
+
 @app.route('/check')
 def check():
 
