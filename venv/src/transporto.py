@@ -25,7 +25,7 @@ def transpose(chords: str, transporto: int) -> str:
     return transposed_chords
 
 
-def song_transpose(song_id, permanent = False, transporto = 0):
+def song_transpose(song_id, permanent = False, transporto = 0, live = False, live_id = -3):
     transporto = request.form.get('transporto') if request.method == 'POST' else 0
     type_transporto = "Permanent" if permanent else "Temporary"
     """
@@ -53,4 +53,4 @@ Dm                  A#    C       Dm      C   Dm
         # here I should update the chords string into the Database...
         update_chords(song_id, chords)
         transporto = 0
-    return render_template('song-transpose.html', title=title, composers=composers, lyricists=lyricists, lyrics=lyrics, chords=chords, zip=zip, transporto=transporto, song_id=song_id, type_transporto=type_transporto)
+    return render_template('song-transpose.html', title=title, composers=composers, lyricists=lyricists, lyrics=lyrics, chords=chords, zip=zip, transporto=transporto, song_id=song_id, type_transporto=type_transporto, live = live, live_id = live_id)

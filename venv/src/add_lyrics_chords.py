@@ -5,7 +5,7 @@ from web_scrape import take_from_greeklyrics
 #import psycopg2 
 
 from help_routes import *
-from __init__ import get_db
+from __init__ import get_db, list_url
 from all import *
 
 
@@ -97,3 +97,5 @@ def add_chords(song_id, update = False):
         
     else:
         pass
+
+        

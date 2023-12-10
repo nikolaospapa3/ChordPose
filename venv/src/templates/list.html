@@ -24,7 +24,7 @@
         <input id="find" list="songs" name="find" autocomplete="off"> ( write/select and press 'Enter')
         <datalist id="songs">
             <select name="song" id="song">
-                 {% for song in songs %}
+                 {% for song in all_songs %}
                  <option value="{{song}}">{{song}}</option>
                  {% endfor%}
             </select>
@@ -139,6 +139,7 @@ function handleEnterKeyPress(){
     parentElement.insertBefore(newhiddenEl, start.nextElementSibling.nextElementSibling); 
     parentElement.insertBefore(newEl, newhiddenEl);
 
+    document.getElementById('find').value = '';
   return false;
 }
 

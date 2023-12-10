@@ -7,8 +7,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
+    {% if live %}
+    <p><a href="/previous-live/{{live_id}}">previous</a> &emsp; &emsp; &emsp; <a href="/next-live/{{live_id}}">next</a></p>
+    {% else %}
     <p><a href="/previous/{{song_id}}">previous</a> &emsp; &emsp; &emsp; <a href="/next/{{song_id}}">next</a></p>
-
+    {% endif %}
     <div> <h2> {{title}} </h2><br>
       
         Music by: {{composers}} <br>

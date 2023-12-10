@@ -31,6 +31,15 @@ def get_song_by_id(song_id: int) -> tuple:
     cursor.close()
     return (title, lyrics, chords, composers, lyricists)
 
+def get_id_by_title(song_title: str) -> int:
+    db = get_db()
+    cursor = db.cursor()
+    sql = f'''select id  from  song where title="{song_title}"'''
+    cursor.execute(sql)
+    id = cursor.fetchall()[0][0]
+    cursor.close()
+    return id
+
 
 def unique_song(title, lyricists: list):
     # check that there is not any song with the same (title and lyricist)

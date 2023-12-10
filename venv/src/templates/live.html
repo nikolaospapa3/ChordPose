@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live</title>
+</head>
+<body>
+    <h2 style="color: blue"> Live </h2>
+    
+    
+    <h3 id="find"> Which Live Song do they play now? </h3>
+
+    {% for id, song in songs_with_index %}
+       &emsp; &emsp; <a href="/live/{{id}}"> {{song}} </a> <br><br>
+    {% endfor %}
+
+    <br> <br> <br> <br><br> <br><br> <br><br> <br>
+    <a href="/"> <<< Home </a> <br><br>
+</body>
+
+</html>

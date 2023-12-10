@@ -23,5 +23,5 @@ def get_db():
     return g.db
 
 def list_url():
-    return '/home/nikolaospapa3/ChordPose/list.txt'
-    #return 'list.txt'
+    #return '/home/nikolaospapa3/ChordPose/list.txt'
+    return 'list.txt'

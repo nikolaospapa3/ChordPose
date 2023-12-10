@@ -92,6 +92,7 @@ def permanent_transporto_route(song_id):
 
 @app.route('/previous/<int:song_id>')
 def previous(song_id):
+    if song_id == 0: return 'No other previous song'
     previous_song_id = song_id - 1
     return redirect(f'/{previous_song_id}/song-transpose')
 
@@ -100,11 +101,22 @@ def next(song_id):
     next_song_id = song_id + 1
     return redirect(f'/{next_song_id}/song-transpose')
 
+@app.route('/previous-live/<int:live_id>')
+def previous_live(live_id):
+    if live_id == 0: return 'No other previous song'
+    previous_live_id = live_id - 1
+    return redirect(f'/live/{previous_live_id}')
+
+@app.route('/next-live/<int:live_id>')
+def next_live(live_id):
+    next_live_id = live_id + 1
+    return redirect(f'/live/{next_live_id}')
+
 @app.route('/list', methods=['GET', 'POST'])
 @auth.login_required
 def list():
     if request.method == 'GET':
-        return render_template('list.html', songs=songs_list())
+        return render_template('list.html', songs=songs_list(), all_songs = all_songs())
     # POST
     out = request.form.get('songList')
     with open(list_url, 'w') as file:
@@ -123,11 +135,32 @@ def check():
     out = "The following songs from the list are not in the Database: <br>"
     for song in songs:
         if song not in db_songs: 
-            if song=='Πυροσβεστήρας': print(f"{'Πυροσβεστήρας' in db_songs} {song}")
-            #out += f"difference '{song}' != ... "
             out += f"{song} <br>"
-            
     return out
+
+@app.route('/live')
+def live_route():
+    songs = songs_list()
+    songs_with_index = zip(range(len(songs)), songs)
+    return render_template('live.html', songs_with_index=songs_with_index)
+
+@app.route('/live/<int:num>')
+def live_song(num: int):
+    songs = songs_list()
+    #print(songs)
+    index_error_message = 'Invalid index, return back! <br>'
+    if num < 0 : return index_error_message
+    try:
+        song_title = songs[num]
+    except:
+        return index_error_message
+    try:
+        id = get_id_by_title(song_title)
+        return song_transpose(id, live = 1, live_id = num)
+    except:
+        return f'{song_title} does not exist in the Database, try to find lyrics somewhere else! <br>'
+    
+    
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
