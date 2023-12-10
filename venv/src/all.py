@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, url_for, flash, redirect, jso
 from flask_httpauth import HTTPBasicAuth
 import mysql.connector
 #import psycopg2 
-from __init__ import get_db
+from __init__ import get_db, list_url
 
 def all_composers() -> list:
     db = get_db()
@@ -29,7 +29,7 @@ def all_songs() -> list:
     return songs 
 
 def songs_list() -> list:
-    with open('list.txt','r') as file:
+    with open(list_url(),'r') as file:
         content = file.read()
         songs = content.split('\n')
         if songs[-1] == '': return songs[:-1]

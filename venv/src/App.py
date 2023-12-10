@@ -6,6 +6,7 @@ import mysql.connector
 from add_lyrics_chords import *
 from help_routes import *
 from transporto import *
+from __init__ import list_url
 
 #from .accept import *
 
@@ -100,120 +101,32 @@ def next(song_id):
     return redirect(f'/{next_song_id}/song-transpose')
 
 @app.route('/list', methods=['GET', 'POST'])
+@auth.login_required
 def list():
     if request.method == 'GET':
         return render_template('list.html', songs=songs_list())
     # POST
     out = request.form.get('songList')
-    with open('list.txt', 'w') as file:
+    with open(list_url, 'w') as file:
         file.write(out)
     return 'Saved Succesfully  <br> <a href="/list">List</a>   <br><br>' + out.replace('\n', '<br>')
 
 @app.route('/check')
 def check():
-
-    songs_list = '''Απόψε λέω να μην κοιμηθούμε
-Δεν ζητάω πολλά
-Που να βρω μια να σου μοιάζει
-Που να βρω γυναίκα να σου μοιάζει
-Ας ερχόσουν για λίγο
-Εσένα που σε ξέρω τόσο λίγο
-Τι έπαιξα στο Λαύριο
-Κάποτε θα ´ρθουν
-Να μ'αγαπάς
-Μια βραδιά στο λούκι
-Πικρία
-Θεσσαλονίκη
-Πες μου μια λέξη
-Γυρίζω τις πλάτες μου στο μέλλον
-Φανή
-Αεροπλάνα
-Σαπιοκάραβο
-Ένας Τούρκος στο Παρίσι
-Μάτια δίχως λογική
-Φύλακας Άγγελος
-Σ αγαπάω
-Κάτι να γυαλίζει
-Ήτανε μια φορά
-Η μπαλάντα του κυρ Μέντιου
-Νύχτωσε νύχτα
-Μη μιλάς άλλο για αγάπη
-Άρνηση
-Στρώσε το στρώμα σου
-Το Άγαλμα
-Μεθυσε αποψε το κοριτσι μου
-Το δίχτυ
-Τσιγάρο ατέλειωτο
-Πριγκηπέσα
-Εκεί στο Νότο
-Μη γυρίσεις
-Οι παλιες αγαπες πανε στον παραδεισο
-Πυροσβεστήρας
-Εξαιρέσεις
-Το φιλαράκι
-Κακές συνήθειες
-Wonderful Tonight
-Τα ήσυχα βράδια
-Καθρέφτης
-Ένας σκύλος στο κολωνάκι
-Ο κόσμος που αλλάζει
-Μπαγάσας
-Φλασάκι
-Μάτια βουρκωμένα
-Φραγκοσυριανή
-Αργοσβήνεις μόνη
-Δεν θα ξαναγαπήσω
-Ρόζα
-Δεν ξέρω πόσο σ´ αγαπώ
-Αγάπη που ´γινες δίκοπο μαχαίρι
-Ξημερώνει Κυριακή
-Καμαρούλα
-Μπαλάντα του Ούρι
-Γέλα πουλί μου 
-Δημοσθενους λεξις
-Περσείδες
-Ανδρομέδα
-Πούλα με
-Ταξίδι
-Μίλησέ μου
-Μαργαριτα Μαργαρώ
-Μια πόλη μαγική
-Μάρκος και Άννα
-Κι όλο σερφάρω
-Σκόνη
-Έτσι κι αλλιώς
-Κηπουρός
-Το καλοκαιράκι
-Δεν κάνει κρύο στην Ελλάδα
-Μισή πίστη
-Στα είπα όλα
-Ωδή στον Γεώργιο Καραϊσκάκη
-Μ´ αρέσει να μη λέω πολλά
-Στην Κ
-Πάντα γελαστοί
-Παραμύθι με λυπημένο τέλος
-Πεχλιβάνης
-Κεμάλ
-Στην Πόλυ
-Με την πρώτη σταγόνα της βροχής
-Σιωπή
-Μιλώ για σένα
-Αεροπλάνα και βαπόρια 
-Έκλαψα χθες
-Χρυσοπράσινο φύλλο
-Η αγάπη θέλει δύο
-Άσπρη μέρα'''.split('\n')
+    with open(list_url(), 'r', encoding='utf-8') as file:
+        songs = file.read()
+    songs = songs.split('\n') 
+    if songs[-1] == '': songs = songs[:-1]
+    if songs[0] == '': songs = songs[1:]
     
     db_songs = all_songs()
-    for song in db_songs:
-        song = song.strip()
-        song = song.replace("'",'')
-    for song in songs_list:
-        song = song.strip()
-        song = song.replace("'",'')
     out = "The following songs from the list are not in the Database: <br>"
-    for song in songs_list:
-        if song not in db_songs: out += f"{song} <br>"
+    for song in songs:
+        if song not in db_songs: 
+            if song=='Πυροσβεστήρας': print(f"{'Πυροσβεστήρας' in db_songs} {song}")
+            #out += f"difference '{song}' != ... "
+            out += f"{song} <br>"
+            
     return out
 
 if __name__ == '__main__':

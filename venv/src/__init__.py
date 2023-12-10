@@ -21,3 +21,7 @@ def get_db():
         g.db.cursor().execute("SET CHARACTER SET utf8;")
         g.db.cursor().execute("SET character_set_connection = utf8;")
     return g.db
+
+def list_url():
+    return '/home/nikolaospapa3/ChordPose/list.txt'
+    #return 'list.txt'
