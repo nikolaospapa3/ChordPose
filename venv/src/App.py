@@ -119,7 +119,7 @@ def list():
         return render_template('list.html', songs=songs_list(), all_songs = all_songs())
     # POST
     out = request.form.get('songList')
-    with open(list_url, 'w') as file:
+    with open(list_url(), 'w') as file:
         file.write(out)
     return 'Saved Succesfully  <br> <a href="/list">List</a>   <br><br>' + out.replace('\n', '<br>')
 
