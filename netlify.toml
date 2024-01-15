@@ -1,3 +1,0 @@
-[build]
-command = "python -m flask --app .\\venv\\src\\App.py run" 
-publish = "venv\\src\\templates"
