@@ -15,6 +15,6 @@ vim src/__init__.py
 
 ## Restore Database from the backup In the host database console (MySQL interpreter) 
 ```bash
-source ~/ChordPose/backup_db_instance/backup-1-11-2023.sql;
+source ~/ChordPose/backup_db_instance/backup-1-1-2024.sql;
 ```
 Don't forget to remove some `song demands` and `recordings`.
